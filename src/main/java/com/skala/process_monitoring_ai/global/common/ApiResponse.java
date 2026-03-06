@@ -8,19 +8,19 @@ import lombok.Getter;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class ApiResponse<T> {
 
-    private final boolean success;
-    private final String message;
+    private final String status;
     private final T data;
+    private final String message;
 
     public static <T> ApiResponse<T> success(T data) {
-        return new ApiResponse<>(true, "OK", data);
+        return new ApiResponse<>("success", data, null);
     }
 
     public static <T> ApiResponse<T> success(String message, T data) {
-        return new ApiResponse<>(true, message, data);
+        return new ApiResponse<>("success", data, message);
     }
 
     public static <T> ApiResponse<T> failure(String message) {
-        return new ApiResponse<>(false, message, null);
+        return new ApiResponse<>("error", null, message);
     }
 }
