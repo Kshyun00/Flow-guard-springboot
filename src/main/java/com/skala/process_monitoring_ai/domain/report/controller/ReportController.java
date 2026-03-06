@@ -1,13 +1,12 @@
 package com.skala.process_monitoring_ai.domain.report.controller;
 
-import com.skala.process_monitoring_ai.domain.report.dto.ReportResponse;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.skala.process_monitoring_ai.domain.report.service.ReportService;
-import com.skala.process_monitoring_ai.global.common.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/reports")
@@ -17,12 +16,19 @@ public class ReportController {
     private final ReportService reportService;
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<ReportResponse>>> getReports() {
-        return ResponseEntity.ok(ApiResponse.success(reportService.getReports()));
+    public ResponseEntity<JsonNode> getReports(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "20") int size) {
+        return ResponseEntity.ok(reportService.getReports(page, size));
     }
 
     @GetMapping("/{reportId}")
-    public ResponseEntity<ApiResponse<ReportResponse>> getReport(@PathVariable String reportId) {
-        return ResponseEntity.ok(ApiResponse.success(reportService.getReport(reportId)));
+    public ResponseEntity<JsonNode> getReport(@PathVariable String reportId) {
+        return ResponseEntity.ok(reportService.getReport(reportId));
+    }
+
+    @PostMapping("/generate")
+    public ResponseEntity<JsonNode> generateReport(@RequestBody Map<String, Object> request) {
+        return ResponseEntity.ok(reportService.generateReport(request));
     }
 }

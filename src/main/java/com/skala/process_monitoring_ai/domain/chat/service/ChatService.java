@@ -1,7 +1,7 @@
 package com.skala.process_monitoring_ai.domain.chat.service;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.skala.process_monitoring_ai.domain.chat.dto.ChatRequest;
-import com.skala.process_monitoring_ai.domain.chat.dto.ChatResponse;
 import com.skala.process_monitoring_ai.global.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,13 +17,13 @@ public class ChatService {
 
     private final WebClient fastApiClient;
 
-    public ChatResponse chat(ChatRequest request, String userEmail) {
+    public JsonNode chat(ChatRequest request, String userEmail) {
         try {
             return fastApiClient.post()
                     .uri("/ai/chat")
                     .bodyValue(new FastApiChatRequest(request.message(), userEmail))
                     .retrieve()
-                    .bodyToMono(ChatResponse.class)
+                    .bodyToMono(JsonNode.class)
                     .block();
         } catch (WebClientResponseException e) {
             log.error("FastAPI 챗봇 요청 실패 - status: {}, body: {}", e.getStatusCode(), e.getResponseBodyAsString());
