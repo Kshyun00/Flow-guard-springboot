@@ -19,17 +19,7 @@
 
 ## 환경 설정
 
-### 1. 사전 요구사항: Docker Desktop 설치 (Mac)
-
-[Docker Desktop for Mac 다운로드](https://docs.docker.com/desktop/install/mac-install/)
-
-> Apple Silicon(M1/M2/M3)과 Intel Mac 모두 지원합니다. 다운로드 페이지에서 칩에 맞는 버전 선택
-
-설치 후 Docker Desktop 앱 실행 → 상단 메뉴바에 고래 아이콘 뜨면 준비 완료
-
----
-
-### 2. DB 실행
+### 1. DB 실행
 
 ```bash
 # 프로젝트 루트에서 실행
@@ -50,7 +40,7 @@ docker-compose down -v    # 컨테이너 + 데이터 전체 삭제
 
 ---
 
-### 3. DB 접속 정보
+### 2. DB 접속 정보
 
 | 항목 | 값 |
 |------|----|
@@ -62,7 +52,7 @@ docker-compose down -v    # 컨테이너 + 데이터 전체 삭제
 
 ---
 
-### 4. 환경변수 설정
+### 3. 환경변수 설정
 
 ```bash
 export DB_USERNAME=postgres
@@ -75,7 +65,7 @@ export FASTAPI_URL=http://localhost:8000
 
 ---
 
-### 5. 테이블 생성
+### 4. 테이블 생성
 
 | 테이블 | 생성 주체 | 시점 |
 |--------|----------|------|
@@ -85,11 +75,9 @@ export FASTAPI_URL=http://localhost:8000
 | `inference_logs` | `init.sql` | 동일 |
 | `notification_settings` | `init.sql` | 동일 |
 
-`init.sql`은 `CREATE TABLE IF NOT EXISTS`로 작성되어 중복 실행해도 안전합니다.
-
 ---
 
-### 6. 앱 실행
+### 5. 앱 실행
 
 ```bash
 ./mvnw spring-boot:run
@@ -99,17 +87,15 @@ export FASTAPI_URL=http://localhost:8000
 
 ## API 목록
 
-| Method | URL | 설명 | 인증 |
-|--------|-----|------|------|
-| POST | `/api/auth/signup` | 회원가입 | ❌ |
-| POST | `/api/auth/login` | 로그인 (JWT 발급) | ❌ |
-| GET | `/api/users/me` | 내 정보 조회 | ✅ |
-| GET | `/api/sensors/stream` | 계측기 실시간 SSE | ✅ |
-| POST | `/api/chat` | RAG 챗봇 | ✅ |
-| GET | `/api/reports` | 보고서 목록 | ✅ |
-| GET | `/api/reports/{reportId}` | 보고서 상세 | ✅ |
-
-> 자세한 API 명세는 [API_SPEC.md](./API_SPEC.md) 참고
+| Method | URL | 설명 |
+|--------|-----|------|
+| POST | `/api/auth/signup` | 회원가입 |
+| POST | `/api/auth/login` | 로그인 (JWT 발급) |
+| GET | `/api/users/me` | 내 정보 조회 |
+| GET | `/api/sensors/stream` | 계측기 실시간 SSE |
+| POST | `/api/chat` | RAG 챗봇 |
+| GET | `/api/reports` | 보고서 목록 |
+| GET | `/api/reports/{reportId}` | 보고서 상세 |
 
 ---
 
