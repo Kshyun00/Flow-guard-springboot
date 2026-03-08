@@ -16,13 +16,18 @@ public class SimulationService {
 
     private final WebClient fastApiClient;
 
-    public JsonNode startSimulation(int faultType, double interval) {
+    public JsonNode startSimulation(int faultType, double interval, String scenario) {
         try {
             return fastApiClient.post()
-                    .uri(uri -> uri.path("/ai/simulation/start")
-                            .queryParam("fault_type", faultType)
-                            .queryParam("interval", interval)
-                            .build())
+                    .uri(uri -> {
+                        var builder = uri.path("/ai/simulation/start")
+                                .queryParam("fault_type", faultType)
+                                .queryParam("interval", interval);
+                        if (scenario != null && !scenario.isEmpty()) {
+                            builder.queryParam("scenario", scenario);
+                        }
+                        return builder.build();
+                    })
                     .retrieve()
                     .bodyToMono(JsonNode.class)
                     .block();

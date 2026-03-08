@@ -16,8 +16,9 @@ public class SimulationController {
     @PostMapping("/start")
     public ResponseEntity<JsonNode> start(
             @RequestParam(defaultValue = "0") int faultType,
-            @RequestParam(defaultValue = "3.0") double interval) {
-        return ResponseEntity.ok(simulationService.startSimulation(faultType, interval));
+            @RequestParam(defaultValue = "3.0") double interval,
+            @RequestParam(required = false) String scenario) {
+        return ResponseEntity.ok(simulationService.startSimulation(faultType, interval, scenario));
     }
 
     @PostMapping("/stop")
