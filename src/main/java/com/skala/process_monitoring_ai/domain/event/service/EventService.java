@@ -17,19 +17,37 @@ public class EventService {
 
     private final WebClient fastApiClient;
 
-    public JsonNode getEvents(int page, int size) {
+    public JsonNode getEvents(int page, int size, Boolean anomalyOnly) {
         try {
             return fastApiClient.get()
-                    .uri(uri -> uri.path("/ai/events")
-                            .queryParam("page", page)
-                            .queryParam("size", size)
-                            .build())
+                    .uri(uri -> {
+                        var builder = uri.path("/ai/events")
+                                .queryParam("page", page)
+                                .queryParam("size", size);
+                        if (Boolean.TRUE.equals(anomalyOnly)) {
+                            builder.queryParam("anomaly_only", true);
+                        }
+                        return builder.build();
+                    })
                     .retrieve()
                     .bodyToMono(JsonNode.class)
                     .block();
         } catch (WebClientResponseException e) {
             log.error("FastAPI 이벤트 목록 조회 실패 - status: {}", e.getStatusCode());
             throw new BusinessException("이벤트 목록을 불러올 수 없습니다.", HttpStatus.BAD_GATEWAY);
+        }
+    }
+
+    public JsonNode getFaultDistribution() {
+        try {
+            return fastApiClient.get()
+                    .uri("/ai/events/fault-distribution")
+                    .retrieve()
+                    .bodyToMono(JsonNode.class)
+                    .block();
+        } catch (WebClientResponseException e) {
+            log.error("Fault 분포 조회 실패 - status: {}", e.getStatusCode());
+            throw new BusinessException("Fault 분포를 조회할 수 없습니다.", HttpStatus.BAD_GATEWAY);
         }
     }
 

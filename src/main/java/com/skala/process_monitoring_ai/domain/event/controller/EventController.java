@@ -18,9 +18,15 @@ public class EventController {
     @GetMapping
     public ResponseEntity<JsonNode> getEvents(
             @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "20") int size
+            @RequestParam(defaultValue = "20") int size,
+            @RequestParam(required = false) Boolean anomalyOnly
     ) {
-        return ResponseEntity.ok(eventService.getEvents(page, size));
+        return ResponseEntity.ok(eventService.getEvents(page, size, anomalyOnly));
+    }
+
+    @GetMapping("/fault-distribution")
+    public ResponseEntity<JsonNode> getFaultDistribution() {
+        return ResponseEntity.ok(eventService.getFaultDistribution());
     }
 
     @GetMapping("/{eventId}")
