@@ -1,0 +1,58 @@
+---
+# PostgreSQL Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres
+  namespace: skala3-ai1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:15-alpine
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_DB
+              value: process_monitoring
+            - name: POSTGRES_USER
+              value: postgres
+            - name: POSTGRES_PASSWORD
+              value: password
+---
+# Spring Boot Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ai1-a3004
+  namespace: skala3-ai1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ai1-a3004
+  template:
+    metadata:
+      labels:
+        app: ai1-a3004
+    spec:
+      containers:
+        - name: ai1-a3004
+          image: amdp-registry.skala-ai.com/skala26a-ai1/ai1-3004:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:postgresql://postgres-service:5432/process_monitoring
+            - name: DB_USERNAME
+              value: postgres
+            - name: DB_PASSWORD
+              value: password

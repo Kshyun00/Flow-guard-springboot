@@ -1,0 +1,26 @@
+---
+# PostgreSQL Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-service
+  namespace: skala3-ai1
+spec:
+  selector:
+    app: postgres
+  ports:
+    - port: 5432
+      targetPort: 5432
+---
+# Spring Boot Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: ai1-a3004-service
+  namespace: skala3-ai1
+spec:
+  selector:
+    app: ai1-a3004
+  ports:
+    - port: 8080
+      targetPort: 8080
