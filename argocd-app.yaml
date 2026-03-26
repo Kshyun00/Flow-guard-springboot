@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: ai1-a3004
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/Kshyun00/Flow-guard-springboot.git
+    targetRevision: main
+    path: .
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: skala3-ai1
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
